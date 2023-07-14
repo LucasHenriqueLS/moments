@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Moment } from 'src/app/Moment';
 import { MomentService } from 'src/app/services/moment.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
   selector: 'app-new-moment',
@@ -10,7 +12,11 @@ import { MomentService } from 'src/app/services/moment.service';
 export class NewMomentComponent {
   btnText: string = 'Compartilhar!';
 
-  constructor(private momentService: MomentService) {}
+  constructor(
+    private momentService: MomentService,
+    private messageService: MessagesService,
+    private router: Router  
+  ) {}
 
   async createHandler(moment: Moment) {
     const formData = new FormData();
@@ -23,5 +29,9 @@ export class NewMomentComponent {
     }
 
     await this.momentService.createMoment(formData).subscribe();
+
+    this.messageService.add('Momento adicionado com sucesso!');
+
+    this.router.navigate(['/']);
   }
 }
